@@ -1,21 +1,21 @@
+- FitForm AI
 
-FitForm AI is a real-time AI-powered fitness form correction web application that helps users perform exercises with proper posture using computer vision and pose estimation.
+FitForm AI is a web application that helps users improve their exercise posture during workouts. The system uses the webcam to track body movements and provide live feedback while performing exercises.
 
-The system uses a webcam to detect body movements, analyze exercise form, count repetitions, and provide live feedback during workouts.
+It can detect exercises like squats, pushups, and bicep curls, count repetitions automatically, and show whether the form is correct or not.
 
 - Features
 
-* Real-time posture detection using MediaPipe and OpenCV
-* AI-based exercise form correction
-* Automatic repetition counting
-* Squat, pushup, and bicep curl tracking
-* Live workout feedback
-* User authentication system
-* Workout history tracking
+* Live body posture tracking
+* Real-time exercise feedback
+* Automatic repetition counter
+* Squat, pushup, and bicep curl detection
+* User login and signup system
+* Workout history and progress tracking
 * Calories estimation
-* Dashboard analytics
+* Dashboard with workout statistics
 * Dark mode support
-* Responsive and professional UI
+* Responsive user interface
 
 - Technologies Used
 
@@ -28,12 +28,12 @@ The system uses a webcam to detect body movements, analyze exercise form, count 
 * JavaScript
 * SQLite / MongoDB
 
--How It Works
+- How It Works
 
-1. User logs into the platform
-2. Webcam captures live body movement
-3. MediaPipe detects body landmarks
+1. User logs into the application
+2. Webcam starts capturing body movement
+3. Body points are detected using MediaPipe
 4. Joint angles are calculated
-5. AI analyzes posture and exercise form
-6. Feedback and rep count are shown in real time
-7. Workout sessions are stored in the database
+5. Exercise form is analyzed
+6. Repetitions and feedback are updated live
+7. Workout data is stored for tracking progress
