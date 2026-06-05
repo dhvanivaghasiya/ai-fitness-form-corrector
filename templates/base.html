@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>{% block title %}FitForm AI{% endblock %} — AI Fitness Form Corrector</title>
+  <meta name="description" content="{% block meta_description %}FitForm AI — Real-time AI-powered fitness form correction with rep counting and progress tracking.{% endblock %}" />
+
+  <!-- Theme script first to avoid flash of wrong theme -->
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+{% if current_user.is_authenticated %}
+<!-- ══════════════════════════════════════════════════════════
+     AUTHENTICATED LAYOUT — Sidebar + Topbar
+══════════════════════════════════════════════════════════ -->
+<div class="app-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon" aria-hidden="true">⚡</div>
+      <span class="sidebar-logo-text">Fit<span>Form</span> AI</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Main</span>
+      <a id="nav-dashboard" href="{{ url_for('dashboard.index') }}"
+         class="nav-link {% if request.endpoint == 'dashboard.index' %}active{% endif %}">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a id="nav-workout" href="{{ url_for('workout.index') }}"
+         class="nav-link {% if request.endpoint == 'workout.index' %}active{% endif %}">
+        <span class="nav-icon">🎯</span> Start Workout
+      </a>
+
+      <span class="nav-section-label" style="margin-top:8px;">Account</span>
+      <a id="nav-logout" href="{{ url_for('auth.logout') }}" class="nav-link">
+        <span class="nav-icon">🚪</span> Logout
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="user-avatar" aria-hidden="true">
+          {{ current_user.name[0].upper() }}
+        </div>
+        <div style="overflow:hidden;">
+          <div style="font-size:13px;font-weight:600;color:var(--txt-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            {{ current_user.name }}
+          </div>
+          <div style="font-size:11px;color:var(--txt-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            {{ current_user.email }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content area -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <header class="topbar" role="banner">
+      <h1 class="topbar-title" style="font-size:16px;font-weight:600;">
+        {% block page_title %}Dashboard{% endblock %}
+      </h1>
+      <div class="topbar-actions">
+        <button class="theme-toggle" id="theme-toggle-topbar" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+        <div class="user-avatar" aria-label="User avatar">{{ current_user.name[0].upper() }}</div>
+      </div>
+    </header>
+
+    <!-- Flash messages (dashboard / workout pages) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div style="padding: 0 28px; margin-top: 4px;">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'error' if category == 'error' else 'success' if category == 'success' else 'info' }}"
+                 role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <main class="page-content" role="main">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+</div><!-- /.app-shell -->
+
+{% else %}
+<!-- ══════════════════════════════════════════════════════════
+     UNAUTHENTICATED LAYOUT — Auth pages (login / signup)
+══════════════════════════════════════════════════════════ -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div style="position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:999;min-width:300px;">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ 'error' if category == 'error' else 'success' if category == 'success' else 'info' }}"
+             role="alert" style="margin-bottom:8px;">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+{{ self.content() }}
+
+{% endif %}
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

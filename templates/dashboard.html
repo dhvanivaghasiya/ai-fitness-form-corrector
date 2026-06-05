@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block meta_description %}Your FitForm AI fitness dashboard — view stats, history, and progress.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+{% endblock %}
+
+{% block content %}
+
+<!-- Welcome Banner -->
+<div class="welcome-banner" role="region" aria-label="Welcome">
+  <div class="welcome-text">
+    <h2 id="greeting-text">Hello, {{ current_user.name.split()[0] }}! 👋</h2>
+    <p>Ready to crush your workout today? Your form is getting better every session.</p>
+  </div>
+  <a id="start-workout-btn" href="{{ url_for('workout.index') }}" class="welcome-cta">
+    Start Workout →
+  </a>
+</div>
+
+<!-- Stat Cards -->
+<div class="stat-grid" role="region" aria-label="Workout statistics">
+  <div class="stat-card">
+    <div class="stat-icon blue" aria-hidden="true">🔁</div>
+    <div class="stat-value" id="stat-total-reps">—</div>
+    <div class="stat-label">Total Reps</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green" aria-hidden="true">🏋️</div>
+    <div class="stat-value" id="stat-total-sessions">—</div>
+    <div class="stat-label">Sessions Completed</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon orange" aria-hidden="true">🔥</div>
+    <div class="stat-value" id="stat-calories">—</div>
+    <div class="stat-label">Calories Burned</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon purple" aria-hidden="true">🎯</div>
+    <div class="stat-value" id="stat-accuracy">—</div>
+    <div class="stat-label">Avg Accuracy</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon blue" aria-hidden="true">📅</div>
+    <div class="stat-value" id="stat-streak">—</div>
+    <div class="stat-label">Current Streak</div>
+  </div>
+</div>
+
+<!-- Charts + Breakdown -->
+<div class="dashboard-grid">
+  <!-- Left: Weekly bar chart + History table -->
+  <div>
+    <!-- Weekly Reps Chart -->
+    <div class="card mb-24">
+      <div class="card-header">
+        <span class="card-title">Weekly Reps</span>
+        <span class="fs-12 text-muted">Last 7 days</span>
+      </div>
+      <div class="card-body">
+        <div class="chart-container">
+          <canvas id="weekChart" aria-label="Weekly reps bar chart" role="img"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workout History Table -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Workout History</span>
+        <a id="start-workout-link" href="{{ url_for('workout.index') }}" class="btn btn-sm btn-primary">+ New Session</a>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <div class="table-wrapper">
+          <table aria-label="Workout history">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Exercise</th>
+                <th>Reps</th>
+                <th>Accuracy</th>
+                <th>Calories</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+              <!-- Populated by dashboard.js -->
+              <tr>
+                <td colspan="6">
+                  <div class="empty-state">
+                    <div class="skeleton" style="width:200px;height:16px;margin:0 auto;"></div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Exercise breakdown donut -->
+  <div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Exercise Breakdown</span>
+      </div>
+      <div class="card-body">
+        <div style="height:200px; position:relative;">
+          <canvas id="breakdownChart" aria-label="Exercise breakdown donut chart" role="img"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick tips card -->
+    <div class="card mt-16">
+      <div class="card-header">
+        <span class="card-title">💡 Form Tips</span>
+      </div>
+      <div class="card-body" style="font-size:13px;color:var(--txt-secondary);line-height:1.7;">
+        <p><strong style="color:var(--txt-primary);">Squats</strong> — Keep your knees tracking over your toes. Lower until thighs are parallel to the floor.</p>
+        <p style="margin-top:10px;"><strong style="color:var(--txt-primary);">Push-ups</strong> — Maintain a rigid plank position. Lower your chest to just above the floor.</p>
+        <p style="margin-top:10px;"><strong style="color:var(--txt-primary);">Bicep Curls</strong> — Keep elbows fixed at your sides. Fully extend at the bottom of each rep.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script>
+  // Set greeting based on local time
+  (function() {
+    const h = new Date().getHours();
+    const greeting = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    const el = document.getElementById('greeting-text');
+    if (el) {
+      const name = el.textContent.split(',')[1];
+      el.textContent = greeting + ',' + name;
+    }
+  })();
+</script>
+{% endblock %}

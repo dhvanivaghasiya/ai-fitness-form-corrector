@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}Start Workout{% endblock %}
+{% block page_title %}Workout Session{% endblock %}
+{% block meta_description %}Start your AI-powered workout session with real-time form correction and rep counting.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="workout-layout">
+
+  <!-- LEFT: Webcam feed -->
+  <div>
+    <div class="webcam-card">
+      <!-- Header -->
+      <div class="webcam-header">
+        <div class="webcam-status">
+          <div class="status-dot" id="status-dot"></div>
+          <span id="status-text">Offline</span>
+        </div>
+        <span class="fs-12 text-muted" id="live-time">00:00</span>
+      </div>
+
+      <!-- Video area -->
+      <div class="webcam-wrapper" id="webcam-wrapper">
+        <!-- Placeholder shown before camera starts -->
+        <div class="webcam-placeholder" id="webcam-placeholder">
+          <div class="webcam-placeholder-icon" aria-hidden="true">📷</div>
+          <p>Click <strong>Start Camera</strong> to begin</p>
+          <p class="fs-12 text-muted">Make sure your full body is visible</p>
+        </div>
+
+        <!-- Hidden until camera active -->
+        <video id="webcam-video" autoplay muted playsinline aria-label="Webcam feed"></video>
+        <canvas id="webcam-canvas" aria-label="Pose overlay"></canvas>
+
+        <!-- Feedback overlay -->
+        <div class="feedback-overlay" id="feedback-overlay" aria-live="polite">
+          Analyzing...
+        </div>
+
+        <!-- Rep count overlay -->
+        <div class="rep-overlay" id="rep-overlay">
+          <div class="rep-count-big" id="rep-count-big">0</div>
+          <div class="rep-label">REPS</div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="webcam-controls">
+        <button id="start-btn" class="btn btn-primary" aria-label="Start camera and exercise">
+          ▶ Start Camera
+        </button>
+        <button id="stop-btn" class="btn btn-outline" disabled aria-label="Stop camera">
+          ■ Stop
+        </button>
+        <button id="save-btn" class="btn btn-outline" disabled aria-label="Save this workout session">
+          💾 Save Session
+        </button>
+      </div>
+    </div>
+
+    <!-- Instructions card -->
+    <div class="card mt-16">
+      <div class="card-header">
+        <span class="card-title">📋 How It Works</span>
+      </div>
+      <div class="card-body">
+        <ol style="font-size:13px;color:var(--txt-secondary);line-height:2;padding-left:18px;">
+          <li>Select an exercise from the right panel</li>
+          <li>Click <strong style="color:var(--txt-primary);">Start Camera</strong> and allow webcam access</li>
+          <li>Position yourself so your full body is visible</li>
+          <li>Perform the exercise — reps are counted automatically</li>
+          <li>Watch the feedback banner for real-time form guidance</li>
+          <li>Click <strong style="color:var(--txt-primary);">Save Session</strong> to record your workout</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Controls panel -->
+  <div class="workout-panel">
+
+    <!-- Exercise selector card -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Select Exercise</span>
+      </div>
+      <div class="card-body">
+        <div class="exercise-selector" role="radiogroup" aria-label="Exercise type">
+          <div class="exercise-option selected" data-exercise="squat" role="radio" aria-checked="true" tabindex="0" id="opt-squat">
+            <div class="exercise-icon" aria-hidden="true">🏋️</div>
+            <div>
+              <div class="exercise-name">Squat</div>
+              <div class="exercise-desc">Lower body strength</div>
+            </div>
+          </div>
+          <div class="exercise-option" data-exercise="pushup" role="radio" aria-checked="false" tabindex="0" id="opt-pushup">
+            <div class="exercise-icon" aria-hidden="true">💪</div>
+            <div>
+              <div class="exercise-name">Push-up</div>
+              <div class="exercise-desc">Chest &amp; triceps</div>
+            </div>
+          </div>
+          <div class="exercise-option" data-exercise="bicep_curl" role="radio" aria-checked="false" tabindex="0" id="opt-curl">
+            <div class="exercise-icon" aria-hidden="true">🦾</div>
+            <div>
+              <div class="exercise-name">Bicep Curl</div>
+              <div class="exercise-desc">Arm &amp; shoulder</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live stats card -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Live Stats</span>
+        <span class="badge badge-blue" id="live-stage-badge">Waiting</span>
+      </div>
+      <div class="card-body" style="padding:14px 20px;">
+        <div class="live-stat-row">
+          <span class="live-stat-label">Reps</span>
+          <span class="live-stat-value" id="live-reps">0</span>
+        </div>
+        <div class="live-stat-row">
+          <span class="live-stat-label">Accuracy</span>
+          <span class="live-stat-value" id="live-accuracy">0%</span>
+        </div>
+        <div class="live-stat-row">
+          <span class="live-stat-label">Calories</span>
+          <span class="live-stat-value" id="live-calories">0</span>
+        </div>
+        <div class="live-stat-row" style="border-bottom:none;">
+          <span class="live-stat-label">Duration</span>
+          <span class="live-stat-value" id="live-time-panel">00:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accuracy ring card -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Form Accuracy</span>
+      </div>
+      <div class="card-body">
+        <div class="accuracy-ring-wrap">
+          <div class="accuracy-ring" id="accuracy-ring" style="--pct:0%;" aria-label="Accuracy percentage">
+            <span class="accuracy-ring-text" id="accuracy-ring-text">0%</span>
+          </div>
+          <div class="accuracy-ring-label">Current Session</div>
+        </div>
+
+        <!-- Feedback tips -->
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+          <div style="font-size:12px;font-weight:600;color:var(--txt-secondary);margin-bottom:8px;">LIVE FEEDBACK</div>
+          <div id="feedback-panel-text"
+               style="font-size:14px;font-weight:500;color:var(--txt-primary);min-height:22px;">
+            —
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Save toast (injected by JS) -->
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/workout.js') }}"></script>
+<script>
+// Sync live-time-panel with the timer in workout.js
+document.addEventListener('DOMContentLoaded', () => {
+  const panelTimer = document.getElementById('live-time-panel');
+  const topTimer   = document.getElementById('live-time');
+  if (panelTimer && topTimer) {
+    const obs = new MutationObserver(() => {
+      panelTimer.textContent = topTimer.textContent;
+    });
+    obs.observe(topTimer, { childList: true, characterData: true, subtree: true });
+  }
+
+  // Sync feedback panel text with the overlay
+  const feedbackOverlay = document.getElementById('feedback-overlay');
+  const feedbackPanel   = document.getElementById('feedback-panel-text');
+  if (feedbackOverlay && feedbackPanel) {
+    const obs2 = new MutationObserver(() => {
+      feedbackPanel.textContent = feedbackOverlay.textContent;
+    });
+    obs2.observe(feedbackOverlay, { childList: true, characterData: true, subtree: true });
+  }
+});
+</script>
+{% endblock %}

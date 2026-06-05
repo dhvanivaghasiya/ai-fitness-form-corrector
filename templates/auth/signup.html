@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Create Account{% endblock %}
+{% block meta_description %}Create your FitForm AI account and start tracking your fitness form today.{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+{% endblock %}
+
+{% block content %}
+<!-- Dark mode toggle -->
+<button class="theme-toggle auth-theme-btn" id="theme-toggle-auth" aria-label="Toggle dark mode">🌙</button>
+
+<div class="auth-page">
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <div class="auth-logo">
+      <div class="auth-logo-icon" aria-hidden="true">⚡</div>
+      <span class="auth-logo-text">Fit<span>Form</span> AI</span>
+    </div>
+
+    <h2 class="auth-heading">Create your account</h2>
+    <p class="auth-subheading">Free forever — no credit card required</p>
+
+    <!-- Signup form -->
+    <form id="signup-form" method="POST" action="{{ url_for('auth.signup') }}" novalidate>
+
+      <div class="form-group">
+        <label class="form-label" for="name">Full name</label>
+        <input
+          class="form-control"
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Alex Johnson"
+          autocomplete="name"
+          required
+          autofocus
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email address</label>
+        <input
+          class="form-control"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-wrapper">
+          <input
+            class="form-control"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Min. 6 characters"
+            autocomplete="new-password"
+            required
+          />
+          <button type="button" class="input-eye-btn" aria-label="Toggle password visibility">👁️</button>
+        </div>
+        <!-- Strength meter -->
+        <div class="strength-bar-wrapper" aria-label="Password strength">
+          <div class="strength-segment" id="seg1"></div>
+          <div class="strength-segment" id="seg2"></div>
+          <div class="strength-segment" id="seg3"></div>
+        </div>
+        <div class="strength-label" id="strength-label"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="confirm_password">Confirm password</label>
+        <div class="input-wrapper">
+          <input
+            class="form-control"
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            placeholder="Repeat your password"
+            autocomplete="new-password"
+            required
+          />
+          <button type="button" class="input-eye-btn" aria-label="Toggle password visibility">👁️</button>
+        </div>
+      </div>
+
+      <button id="signup-submit-btn" type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:4px;">
+        Create Account
+      </button>
+
+    </form>
+
+    <div class="auth-footer">
+      Already have an account?
+      <a href="{{ url_for('auth.login') }}" style="font-weight:600;">Sign in</a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

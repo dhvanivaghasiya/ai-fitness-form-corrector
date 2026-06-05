@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block meta_description %}Sign in to your FitForm AI account to track your fitness progress.{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+{% endblock %}
+
+{% block content %}
+<!-- Dark mode toggle fixed top-right -->
+<button class="theme-toggle auth-theme-btn" id="theme-toggle-auth" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+
+<div class="auth-page">
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <div class="auth-logo">
+      <div class="auth-logo-icon" aria-hidden="true">⚡</div>
+      <span class="auth-logo-text">Fit<span>Form</span> AI</span>
+    </div>
+
+    <h2 class="auth-heading">Welcome back</h2>
+    <p class="auth-subheading">Sign in to continue your fitness journey</p>
+
+    <!-- Login form -->
+    <form id="login-form" method="POST" action="{{ url_for('auth.login') }}" novalidate>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email address</label>
+        <input
+          class="form-control"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+          autofocus
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-wrapper">
+          <input
+            class="form-control"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          />
+          <button type="button" class="input-eye-btn" aria-label="Toggle password visibility">👁️</button>
+        </div>
+      </div>
+
+      <div class="auth-row">
+        <label class="checkbox-label" for="remember">
+          <input type="checkbox" id="remember" name="remember" />
+          Remember me
+        </label>
+      </div>
+
+      <button id="login-submit-btn" type="submit" class="btn btn-primary btn-full btn-lg">
+        Sign In
+      </button>
+
+    </form>
+
+    <div class="auth-footer">
+      Don't have an account?
+      <a href="{{ url_for('auth.signup') }}" style="font-weight:600;">Create one free</a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}
