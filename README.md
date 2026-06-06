@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # FitForm AI
 
 **Real-time exercise form correction powered by computer vision — built for people who train without a coach.**
@@ -336,3 +337,6 @@ Built as a final year project / portfolio project demonstrating real-time comput
 ---
 
 *Built with Python, Flask, MediaPipe, and a lot of squats.*
+=======
+
+>>>>>>> a496b4d0426289613ab498aad67d35fa23248f77
