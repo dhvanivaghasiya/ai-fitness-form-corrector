@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 💪 FitForm AI
 
 ### Real-Time AI Fitness Form Correction System
@@ -57,12 +58,12 @@ ai-fitness-form-corrector/
 
 # User Login Page
 
-![Login Page](screenshots/login-page.png)
+![Login Page](screenshots/user-login-page.png)
 
 
 # User Registration Page
 
-![Registration Page](screenshots/registration-page.png)
+![Registration Page](screenshots/user-registration-page.png)
 
 
 # Dashboard Overview
@@ -111,3 +112,15 @@ ai-fitness-form-corrector/
 Contributions are welcome. Feel free to fork the repository and submit pull requests.
 
 
+=======
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 63806e0e8f359c0ace9320138e041fa98264dc3c
