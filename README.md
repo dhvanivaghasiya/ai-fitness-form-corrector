@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# 💪 FitForm AI
+#  FitForm AI
 
 ### Real-Time AI Fitness Form Correction System
 
@@ -23,20 +22,18 @@ Built with Python, Flask, OpenCV, and MediaPipe, the project focuses on creating
 * Responsive and modern UI
 
 
-##  Tech Stack
+# Technologies Used
 
-| Category           | Technologies          |
-| ------------------ | --------------------- |
-| Backend            | Python, Flask         |
-| Frontend           | HTML, CSS, JavaScript |
-| Computer Vision    | OpenCV, MediaPipe     |
-| Database           | SQLite                |
-| Authentication     | Flask-Login           |
-| Charts & Analytics | Chart.js              |
-| Version Control    | Git & GitHub          |
+- Frontend: HTML, CSS, JavaScript
+- Backend: Python, Flask
+- Computer Vision: OpenCV, MediaPipe
+- Database: SQLite
+- Authentication: Flask-Login
+- Charts & Analytics: Chart.js
+- Version Control: Git, GitHub
 
 
-## Project Structure
+# Project Structure
 
 ai-fitness-form-corrector/
 │
@@ -106,13 +103,6 @@ ai-fitness-form-corrector/
 * Mobile application support
 * Cloud deployment
 
-
-# Contributing
-
-Contributions are welcome. Feel free to fork the repository and submit pull requests.
-
-
-=======
 
 
 
